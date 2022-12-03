@@ -1,0 +1,47 @@
+import cv2
+
+
+# 新建一个窗口
+cv2.namedWindow('window',cv2.WINDOW_NORMAL)
+cv2.resizeWindow('window',1080,1000)
+
+# 连接到摄像头
+cap = cv2.VideoCapture(0)
+# 调出录像功能
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+vw = cv2.VideoWriter('C:\\Users\\34803\\Desktop\\luxiang.mp4',fourcc,20,(640,480))
+
+# 设置截图和录像的基准状态
+num = 0
+k = 'off'
+while True:
+    # 获取帧
+    ret,frame = cap.read()
+    if not ret:
+        print('读取该帧失败!')
+        break
+    # 展示图象
+    cv2.imshow('window',frame)
+    # 添加截图功能和录像功能，以一毫秒为时间间隔
+    key = cv2.waitKey(1)
+    # 截屏功能
+    if key == ord('j'):
+        cv2.imwrite(rf'C:\Users\34803\Desktop\{num}.jpg',frame)
+    # 录像功能
+    if key == ord('s') and k == 'off':
+        k = 'start'
+    if key == ord('o') and k == 'start':
+        k = 'off'
+    if k == 'start':
+        vw.write(frame)
+    # 退出循环
+    if key == ord('q'):
+        break
+    
+    num += 1
+    
+# 释放相关变量
+cap.release()
+vw.release()
+# 销毁窗口
+cv2.destroyAllWindows()
